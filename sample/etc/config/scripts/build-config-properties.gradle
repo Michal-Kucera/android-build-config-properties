@@ -1,0 +1,34 @@
+ext {
+    processBuildConfigProperties = this.&processBuildConfigProperties
+}
+
+def processBuildConfigProperties(def buildTypeOrProductFlavor) {
+    println "Processing build config properties for: ${buildTypeOrProductFlavor.name}"
+    getConfigurationProperties(buildTypeOrProductFlavor.name).each { property ->
+        def propertyKey = property.key.toUpperCase().replaceAll('[-.]', '_')
+        def propertyValue = property.value
+        if (propertyValue.isNumber()) {
+            buildTypeOrProductFlavor.buildConfigField 'int', propertyKey, propertyValue
+
+        } else if ('true'.equals(propertyValue) || 'false'.equals(propertyValue)) {
+            buildTypeOrProductFlavor.buildConfigField 'boolean', propertyKey, propertyValue
+
+        } else {
+            buildTypeOrProductFlavor.buildConfigField 'String', propertyKey, "\"${propertyValue}\""
+        }
+    }
+}
+
+def getConfigurationProperties(def configName) {
+    def properties = getProperties("$rootDir/etc/config/default-config.properties")
+    properties.putAll(getProperties("$rootDir/etc/config/${configName}-config.properties"))
+    properties.remove('#')
+    properties.remove('')
+    return properties
+}
+
+def getProperties(def configurationPropertyFile) {
+    def configurationProperties = new Properties()
+    configurationProperties.load(new FileInputStream(configurationPropertyFile))
+    return configurationProperties
+}

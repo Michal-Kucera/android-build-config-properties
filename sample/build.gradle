@@ -1,0 +1,25 @@
+apply {
+    from "$rootDir/etc/config/scripts/build-config-properties.gradle"
+}
+
+android {
+    buildTypes {
+        debug {
+            processBuildConfigProperties it
+        }
+
+        release {
+            processBuildConfigProperties it
+        }
+    }
+
+    productFlavors {
+        mock {
+            processBuildConfigProperties it
+        }
+
+        prod {
+            processBuildConfigProperties it
+        }
+    }
+}
