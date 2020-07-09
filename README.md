@@ -13,10 +13,10 @@ Generate BuildConfig fields for build types as well as product flavors from a pr
 > At the moment we do support `String`, `int` as well as `boolean`.
 
 - String:
-    > Strings cannot contain spaces
+    > Strings **can** contain spaces or special characters
 
     ```properties
-    com.android.properties.string.sample=Sample-string-123
+    com.android.properties.string.sample=This is a sample string 123
     ```
 
 - Integer:
